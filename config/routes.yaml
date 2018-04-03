@@ -1,6 +1,6 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+index:
+    path: /sanity
+    controller: App\Controller\HookController::sanity
 
 hook:
     path: /hook

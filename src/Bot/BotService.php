@@ -2,52 +2,61 @@
 
 namespace App\Bot;
 
-use App\BotCommands\CommandObserver;
-use Psr\Log\LoggerInterface;
-use Telegram\Bot\Api;
-use Telegram\Bot\Exceptions\TelegramSDKException;
+use App\Logger;
+use Longman\TelegramBot\Exception\TelegramException;
+use Longman\TelegramBot\Telegram;
+use Longman\TelegramBot\TelegramLog;
 
 class BotService
 {
 
     const BOT_API_KEY = '586818585:AAFz5J_rX2zU4fVe8RfyO3xVqwCr9N-FUZA';
     const WEBHOOK_SET_ALLOW_TOKEN = 'ntvhn7-9Ve8RfyO-cz5J_rX2-zU4-t49903487';
-    const HOOK_URL = 'https://cb792568.ngrok.io/hook';
+    const HOOK_URL = 'https://18b2fe59.ngrok.io/hook';
+    const COMMANDS_PATH = __DIR__.'/../../BotCommands';
 
     /**
-     * @var Api
+     * @var Telegram
      */
     private $api;
 
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    public function __construct(LoggerInterface $logger)
+    public function __construct()
     {
-        $this->logger = $logger;
         $this->api = BotFactory::create(self::BOT_API_KEY);
-        CommandObserver::register($this);
+        TelegramLog::initialize(Logger::getLogger());
         return $this;
     }
 
+    /**
+     * @return bool
+     * @throws TelegramException
+     */
     public function handle()
     {
-        $this->api->commandsHandler(true);
-    }
+        $this->api->addCommandsPaths([self::COMMANDS_PATH]);
+        $this->api->enableAdmins($this->getAdminUsers());
+        $this->api->enableLimiter();
+        $this->api->enableMySql($this->getMysqlConfig());
 
-    public function handleCallback(\ArrayObject $callbackQuery)
-    {
-        if (array_key_exists('data', $callbackQuery)) {
-            // TODO: Handle callback
-            $this->logger->info($callbackQuery['data']);
-        }
+        // Set custom Upload and Download paths
+        //$telegram->setDownloadPath(__DIR__ . '/Download');
+        //$telegram->setUploadPath(__DIR__ . '/Upload');
+
+        // Here you can set some command specific parameters
+        // e.g. Google geocode/timezone api key for /date command
+        //$telegram->setCommandConfig('date', ['google_api_key' => 'your_google_api_key_here']);
+
+        // Botan.io integration
+        //$telegram->enableBotan('your_botan_token');
+
+        $this->api->handle();
+
+        return true;
     }
 
     /**
      * @param string $authToken
-     * @return bool|\Telegram\Bot\Objects\WebhookInfo
+     * @return bool
      */
     public function setWebHook(string $authToken)
     {
@@ -56,20 +65,41 @@ class BotService
         }
 
         try {
-            $this->api->setWebhook([
-                'url' => self::HOOK_URL,
-            ]);
-        } catch (TelegramSDKException $e) {
+            $this->api->setWebhook(self::HOOK_URL);
+        } catch (TelegramException $e) {
             return false;
         }
 
-        return $this->api->getWebhookInfo();
+        return true;
     }
 
     /**
-     * @return Api
+     * @return array
      */
-    public function getApi(): Api
+    private function getMysqlConfig()
+    {
+        return [
+            'host'     => 'localhost',
+            'user'     => 'root',
+            'password' => '',
+            'database' => 'feshbach',
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getAdminUsers()
+    {
+        return [
+            'markomitranic'
+        ];
+    }
+
+    /**
+     * @return Telegram
+     */
+    public function getApi(): Telegram
     {
         return $this->api;
     }

@@ -1,7 +1,4 @@
 {
-    "doctrine/inflector": {
-        "version": "v1.3.0"
-    },
     "guzzlehttp/guzzle": {
         "version": "6.3.2"
     },
@@ -11,23 +8,11 @@
     "guzzlehttp/psr7": {
         "version": "1.4.2"
     },
-    "illuminate/contracts": {
-        "version": "v5.6.15"
-    },
-    "illuminate/support": {
-        "version": "v5.6.15"
-    },
-    "irazasyed/telegram-bot-sdk": {
-        "version": "v3.0.0"
-    },
-    "league/event": {
-        "version": "2.1.2"
+    "longman/telegram-bot": {
+        "version": "0.53.0"
     },
     "monolog/monolog": {
         "version": "1.23.0"
-    },
-    "nesbot/carbon": {
-        "version": "1.25.0"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -138,15 +123,6 @@
             "branch": "master",
             "version": "4.0",
             "ref": "cda8b550123383d25827705d05a42acf6819fe4e"
-        }
-    },
-    "symfony/translation": {
-        "version": "3.3",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "3.3",
-            "ref": "6bcd6c570c017ea6ae5a7a6a027c929fd3542cd8"
         }
     },
     "symfony/twig-bridge": {
