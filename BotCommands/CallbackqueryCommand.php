@@ -1,16 +1,12 @@
 <?php
-/**
- * This file is part of the TelegramBot package.
- *
- * (c) Avtandil Kikabidze aka LONGMAN <akalongman@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
+use App\DogApi;
+use App\Logger;
+use GuzzleHttp\Exception\GuzzleException;
 use Longman\TelegramBot\Commands\SystemCommand;
+use Longman\TelegramBot\Entities\CallbackQuery;
 use Longman\TelegramBot\Request;
 
 /**
@@ -38,6 +34,13 @@ class CallbackqueryCommand extends SystemCommand
     protected $version = '1.1.1';
 
     /**
+     * @var array
+     */
+    private $commands = [
+        'pugBomb' => 'pugBomb'
+    ];
+
+    /**
      * Command execute method
      *
      * @return \Longman\TelegramBot\Entities\ServerResponse
@@ -45,17 +48,22 @@ class CallbackqueryCommand extends SystemCommand
      */
     public function execute()
     {
-        $callback_query    = $this->getCallbackQuery();
-        $callback_query_id = $callback_query->getId();
-        $callback_data     = $callback_query->getData();
+        $callback_query = $this->getCallbackQuery();
+        $data = $callback_query->getData();
 
-        $data = [
-            'callback_query_id' => $callback_query_id,
-            'text'              => 'Hello World!',
-            'show_alert'        => $callback_data === 'thumb up',
-            'cache_time'        => 5,
-        ];
+        $command = explode('_', $data);
+        $command = $command[0];
+
+        if (isset($this->commands[$command]) && $this->getTelegram()->getCommandObject($this->commands[$command])) {
+            return $this->getTelegram()->executeCommand($this->commands[$command]);
+        } else {
+            $data = [];
+            $data['callback_query_id'] = $callback_query->getId();
+            $data['text'] = 'Invalid request!';
+            $data['show_alert'] = true;
+        }
 
         return Request::answerCallbackQuery($data);
     }
+
 }

@@ -2,32 +2,52 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
-use Longman\TelegramBot\Commands\SystemCommand;
+use Longman\TelegramBot\Commands\UserCommand;
+use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Entities\InlineKeyboard;
+use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Request;
 
-class StartCommand extends SystemCommand
+class StartCommand extends UserCommand
 {
+
     /**
      * @var string
      */
     protected $name = 'start';
+
     /**
      * @var string
      */
     protected $description = 'Start command';
+
     /**
      * @var string
      */
     protected $usage = '/start';
+
     /**
      * @var string
      */
     protected $version = '1.1.0';
+
     /**
      * @var bool
      */
     protected $private_only = true;
+
+    /**
+     * @var bool
+     */
+    protected $need_mysql = true;
+
+    /**
+     * Conversation Object
+     *
+     * @var \Longman\TelegramBot\Conversation
+     */
+    protected $conversation;
+
     /**
      * Command execute method
      *
@@ -43,7 +63,7 @@ class StartCommand extends SystemCommand
         $text .= 'I am so sorry 😅, but in order to make you feel better, help yourself with a Pug bomb'. PHP_EOL;
 
         $inline_keyboard = new InlineKeyboard([
-            ['text' => '🐨 Pug Bomb', 'callback_data' => 'pug_bomb'],
+            ['text' => '🐨 Pug Bomb', 'callback_data' => 'pugBomb'],
         ]);
 
         $data = [
@@ -53,4 +73,5 @@ class StartCommand extends SystemCommand
         ];
         return Request::sendMessage($data);
     }
+
 }
