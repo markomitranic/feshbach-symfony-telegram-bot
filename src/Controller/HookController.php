@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Bot\BotService;
 use App\Logger;
+use Longman\TelegramBot\Exception\TelegramException;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -46,7 +47,14 @@ class HookController extends Controller
      */
     public function set(string $authToken)
     {
-        $webHookInfo = $this->bot->setWebHook($authToken);
+        try {
+            $webHookInfo = $this->bot->setWebHook($authToken);
+        } catch (TelegramException $e) {
+            return new JsonResponse([
+                'message' => $e->getMessage(),
+                'trace' => $e->getTrace()
+            ]);
+        }
         return new JsonResponse($webHookInfo);
     }
 

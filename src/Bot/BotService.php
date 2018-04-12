@@ -4,6 +4,7 @@ namespace App\Bot;
 
 use App\Logger;
 use Longman\TelegramBot\Exception\TelegramException;
+use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Telegram;
 use Longman\TelegramBot\TelegramLog;
 
@@ -12,7 +13,7 @@ class BotService
 
     const BOT_API_KEY = '586818585:AAFz5J_rX2zU4fVe8RfyO3xVqwCr9N-FUZA';
     const WEBHOOK_SET_ALLOW_TOKEN = 'ntvhn7-9Ve8RfyO-cz5J_rX2-zU4-t49903487';
-    const HOOK_URL = 'https://6eb89280.ngrok.io/hook';
+    const HOOK_URL = 'https://477b75c4.ngrok.io/hook';
     const COMMANDS_PATH = __DIR__.'/../../BotCommands';
 
     /**
@@ -49,6 +50,7 @@ class BotService
         // Botan.io integration
         //$telegram->enableBotan('your_botan_token');
 
+
         $this->api->handle();
 
         return true;
@@ -57,6 +59,7 @@ class BotService
     /**
      * @param string $authToken
      * @return bool
+     * @throws TelegramException
      */
     public function setWebHook(string $authToken)
     {
@@ -64,11 +67,7 @@ class BotService
             return false;
         }
 
-        try {
-            $this->api->setWebhook(self::HOOK_URL);
-        } catch (TelegramException $e) {
-            return false;
-        }
+        $this->api->setWebhook(self::HOOK_URL);
 
         return true;
     }

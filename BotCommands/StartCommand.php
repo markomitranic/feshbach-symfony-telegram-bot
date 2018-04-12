@@ -58,19 +58,28 @@ class StartCommand extends UserCommand
     {
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
+        $data['chat_id'] = $chat_id;
+
         $text = 'Hi there!' . PHP_EOL;
-        $text .= 'Hello! Welcome to our bot, for now, there is not much you can do.'. PHP_EOL.PHP_EOL;
-        $text .= 'I am so sorry 😅, but in order to make you feel better, help yourself with a Pug bomb'. PHP_EOL;
+        $text .= 'Welcome to Resonate.io, i will be your host for these couple of days. 🙂'. PHP_EOL;
+        $data['text'] = $text;
+        Request::sendMessage($data);
 
-        $inline_keyboard = new InlineKeyboard([
-            ['text' => '🐨 Pug Bomb', 'callback_data' => 'pugBomb'],
+        $text = '';
+        $text .= 'You can ask me stuff via the keyboard keys, or if you are a terminal-lover, there is always the /help command to help you get started.'. PHP_EOL;
+        $text .= PHP_EOL;
+        $text .= 'Also, only if you are willing, i can ask you a couple of questions so I get to know you better and maybe help me draw some statistics. Or not, your choice.'.PHP_EOL;
+        $data['text'] = $text;
+
+        $inline_keyboard = new Keyboard([
+            ['text' => 'What now? ⏱'], ['text' => 'Find a Workgroup 🎎'],
+        ], [
+            ['text' => 'Tweet about us 🐦'], ['text' => 'Rate a lecture 🏅'],
+        ], [
+            ['text' => 'Information Desk ℹ️']
         ]);
+        $data['reply_markup'] = $inline_keyboard;
 
-        $data = [
-            'chat_id' => $chat_id,
-            'text'    => $text,
-            'reply_markup' => $inline_keyboard
-        ];
         return Request::sendMessage($data);
     }
 

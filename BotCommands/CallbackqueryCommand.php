@@ -2,9 +2,7 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
-use App\DogApi;
-use App\Logger;
-use GuzzleHttp\Exception\GuzzleException;
+use App\Bot\Exceptions\UnrecognizedCommandException;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\CallbackQuery;
 use Longman\TelegramBot\Request;
@@ -36,33 +34,65 @@ class CallbackqueryCommand extends SystemCommand
     /**
      * @var array
      */
-    private $commands = [
-        'pugBomb' => 'pugBomb'
+    private $allowedCallbackCommands = [
+        'pugBomb' => 'pugBomb',
+        'personalSurvey' => 'personalSurvey'
     ];
 
     /**
      * Command execute method
      *
      * @return \Longman\TelegramBot\Entities\ServerResponse
-     * @throws \Longman\TelegramBot\Exception\TelegramException
      */
     public function execute()
     {
         $callback_query = $this->getCallbackQuery();
         $data = $callback_query->getData();
 
-        $command = explode('_', $data);
-        $command = $command[0];
+        $command = explode('__', $data);
+        $callbackType = $command[0];
+        $callbackName = $command[1];
 
-        if (isset($this->commands[$command]) && $this->getTelegram()->getCommandObject($this->commands[$command])) {
-            return $this->getTelegram()->executeCommand($this->commands[$command]);
-        } else {
-            $data = [];
-            $data['callback_query_id'] = $callback_query->getId();
-            $data['text'] = 'Invalid request!';
-            $data['show_alert'] = true;
+        try {
+
+            switch ($callbackType) {
+                case 'command':
+                    return $this->executeCommandByName($callbackName);
+                default:
+                    return $this->generateInvalidCommandReply($callback_query);
+            }
+
+        } catch (\Exception $e) {
+            return $this->generateInvalidCommandReply($callback_query);
+        }
+    }
+
+    /**
+     * @param string $commandName
+     * @return mixed
+     * @throws \Longman\TelegramBot\Exception\TelegramException
+     * @throws UnrecognizedCommandException
+     */
+    private function executeCommandByName(string $commandName)
+    {
+        if (!isset($this->allowedCallbackCommands[$commandName])
+            || !$this->getTelegram()->getCommandObject($this->allowedCallbackCommands[$commandName])) {
+            throw new UnrecognizedCommandException();
         }
 
+        return $this->getTelegram()->executeCommand($this->allowedCallbackCommands[$commandName]);
+    }
+
+    /**
+     * @param CallbackQuery $callback_query
+     * @return \Longman\TelegramBot\Entities\ServerResponse
+     */
+    private function generateInvalidCommandReply(CallbackQuery $callback_query)
+    {
+        $data = [];
+        $data['callback_query_id'] = $callback_query->getId();
+        $data['text'] = 'Invalid request!';
+        $data['show_alert'] = true;
         return Request::answerCallbackQuery($data);
     }
 
