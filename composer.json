@@ -6,9 +6,11 @@
         "ext-iconv": "*",
         "doctrine/doctrine-bundle": "^1.8",
         "doctrine/doctrine-migrations-bundle": "^1.0",
+        "fzaninotto/faker": "^1.7",
         "longman/telegram-bot": "^0.53.0",
         "symfony/console": "^4.0",
         "symfony/debug-bundle": "^4.0",
+        "symfony/dotenv": "^4.0",
         "symfony/flex": "^1.0",
         "symfony/framework-bundle": "^4.0",
         "symfony/lts": "^4@dev",
@@ -18,7 +20,7 @@
         "symfony/yaml": "^4.0"
     },
     "require-dev": {
-        "symfony/dotenv": "^4.0"
+        "doctrine/doctrine-fixtures-bundle": "^3.0"
     },
     "config": {
         "preferred-install": {
