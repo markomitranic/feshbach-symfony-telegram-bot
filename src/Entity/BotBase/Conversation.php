@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\BotBase;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -57,9 +57,9 @@ class Conversation
     private $id;
 
     /**
-     * @var \App\Entity\User
+     * @var \App\Entity\BotBase\User
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\BotBase\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * })
@@ -67,9 +67,9 @@ class Conversation
     private $user;
 
     /**
-     * @var \App\Entity\Chat
+     * @var \App\Entity\BotBase\Chat
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Chat")
+     * @ORM\ManyToOne(targetEntity="App\Entity\BotBase\Chat")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="chat_id", referencedColumnName="id")
      * })

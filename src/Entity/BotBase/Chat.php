@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\BotBase;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -73,7 +73,7 @@ class Chat
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="chat")
+     * @ORM\ManyToMany(targetEntity="App\Entity\BotBase\User", mappedBy="chat")
      */
     private $user;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\BotBase;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -43,9 +43,9 @@ class CallbackQuery
     private $id;
 
     /**
-     * @var \App\Entity\User
+     * @var \App\Entity\BotBase\User
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\BotBase\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * })
@@ -53,9 +53,9 @@ class CallbackQuery
     private $user;
 
     /**
-     * @var \App\Entity\Message
+     * @var \App\Entity\BotBase\Message
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Message")
+     * @ORM\ManyToOne(targetEntity="App\Entity\BotBase\Message")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="chat_id", referencedColumnName="chat_id"),
      *   @ORM\JoinColumn(name="message_id", referencedColumnName="id")
