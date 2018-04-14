@@ -17,14 +17,10 @@ class Lecture
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var Speaker
+     * @ORM\ManyToOne(targetEntity="App\Entity\Speaker", inversedBy="lectures")
      */
-    private $name;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $metaName;
+    private $speaker;
 
     /**
      * @ORM\Column(type="datetime_immutable")
@@ -104,5 +100,21 @@ class Lecture
         $this->photoUrl = $photoUrl;
 
         return $this;
+    }
+
+    /**
+     * @return Speaker
+     */
+    public function getSpeaker(): Speaker
+    {
+        return $this->speaker;
+    }
+
+    /**
+     * @param Speaker $speaker
+     */
+    public function setSpeaker(Speaker $speaker): void
+    {
+        $this->speaker = $speaker;
     }
 }

@@ -9,3 +9,7 @@ hook:
 set:
     path: /set/{authToken}
     controller: App\Controller\HookController::set
+
+debug:
+    path: /debug
+    controller: App\Controller\HookController::debug

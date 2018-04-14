@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Bot\BotService;
+use App\Provider\LectureProvider;
 use App\Logger;
+use Doctrine\Common\Persistence\ObjectManager;
 use Longman\TelegramBot\Exception\TelegramException;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -18,12 +20,26 @@ class HookController extends Controller
      */
     private $bot;
 
+    /**
+     * @var ObjectManager
+     */
+    private $om;
+
+    /**
+     * @var LectureProvider
+     */
+    private $lectureProvider;
+
     public function __construct(
         BotService $bot,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ObjectManager $om,
+        LectureProvider $lectureProvider
     ) {
         Logger::init($logger);
         $this->bot = $bot;
+        $this->om = $om;
+        $this->lectureProvider = $lectureProvider;
     }
 
     /**
@@ -56,6 +72,17 @@ class HookController extends Controller
             ]);
         }
         return new JsonResponse($webHookInfo);
+    }
+
+    /**
+     * @return void
+     */
+    public function debug()
+    {
+
+
+        dump('marko');
+        die;
     }
 
     /**

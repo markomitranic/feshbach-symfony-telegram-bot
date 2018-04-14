@@ -1,10 +1,14 @@
 <?php
 
-namespace Longman\TelegramBot\Commands\UserCommands;
+namespace Longman\TelegramBot\Commands\SystemCommands;
 
+use App\Provider\LectureProvider;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
+use Longman\TelegramBot\Entities\Update;
 use Longman\TelegramBot\Request;
+use Longman\TelegramBot\Telegram;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class WhatNowCommand extends UserCommand
 {
@@ -30,6 +34,18 @@ class WhatNowCommand extends UserCommand
     protected $version = '1.0.0';
 
     /**
+     * @var LectureProvider
+     */
+    protected $lectureProvider;
+
+    public function __construct(
+        Telegram $telegram,
+        Update $update = null
+    ) {
+        parent::__construct($telegram, $update);
+    }
+
+    /**
      * Execute command
      *
      * @return \Longman\TelegramBot\Entities\ServerResponse
@@ -41,19 +57,16 @@ class WhatNowCommand extends UserCommand
         $chat_id = $message->getChat()->getId();
         $data['chat_id'] = $chat_id;
 
-        $events = [
-            'Franc Camps-Febrer - Forensic Architecture',
-            'Hungry Castle - Fashion for Planet Earth',
-            'Jan Robert Leegete - NetArt'
-        ];
+        try {
+            $events = $this->getNextEvents();
+        } catch (ResourceNotFoundException $e) {
+            return $this->respondWithNoEvents($data);
+        } catch (\Exception $e) {
+            $data['text'] = 'Uh oh, something went wrong. 🤡';
+            return Request::sendMessage($data);
+        }
 
-        $data['text'] = 'Sorry, I couldn’t find any matching lectures. 😐';
 
-//        if (empty($events)) {
-//            $data['text'] = 'Sorry, I couldn’t find any matching lectures. 😐';
-//        } else {
-//            $data['text'] = 'Here, just some quick and dirty direct links.';
-//        }
 //
 //        $inline_keyboard = new InlineKeyboard([
 //            ['text' => 'Tweet to @resonate.io', 'url' => 'https://twitter.com/intent/tweet?text=@resonate_io']
@@ -65,4 +78,35 @@ class WhatNowCommand extends UserCommand
 
         return Request::sendMessage($data);
     }
+
+    /**
+     * @param array $data
+     * @return \Longman\TelegramBot\Entities\ServerResponse
+     * @throws \Longman\TelegramBot\Exception\TelegramException
+     */
+    private function respondWithNoEvents(array $data)
+    {
+        $data['text'] = 'Sorry pal, i don\'t see any events starting in the next hour. 😐';
+
+        $inline_keyboard = new InlineKeyboard([
+            ['text' => 'See all events today?', 'callback_query' => 'command__whatNow__today']
+        ]);
+        $inline_keyboard = $inline_keyboard->setResizeKeyboard(true);
+        $data['reply_markup'] = $inline_keyboard;
+        return Request::sendMessage($data);
+    }
+
+    /**
+     * @return \App\Entity\Lecture[]
+     * @throws \Exception
+     * @throws ResourceNotFoundException
+     */
+    private function getNextEvents()
+    {
+        return $this->lectureProvider->findLecturesInInterval(
+            new \DateTimeImmutable(),
+            new \DateTimeImmutable('+1 minute')
+        );
+    }
+
 }
