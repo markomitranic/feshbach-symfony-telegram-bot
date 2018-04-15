@@ -4,13 +4,11 @@ namespace App\Bot;
 
 use App\Logger;
 use Longman\TelegramBot\Exception\TelegramException;
-use Longman\TelegramBot\Request;
 use Longman\TelegramBot\TelegramLog;
 
 class BotService
 {
 
-    const BOT_API_KEY = '586818585:AAFz5J_rX2zU4fVe8RfyO3xVqwCr9N-FUZA';
     const WEBHOOK_SET_ALLOW_TOKEN = 'ntvhn7-9Ve8RfyO-cz5J_rX2-zU4-t49903487';
     const HOOK_URL = 'https://061731b2.ngrok.io/hook';
     const COMMANDS_PATH = __DIR__.'/../../BotCommands';
@@ -20,11 +18,15 @@ class BotService
      */
     private $api;
 
-    public function __construct()
-    {
-        $this->api = BotFactory::create(self::BOT_API_KEY);
+    /**
+     * BotService constructor.
+     * @param Telegram $telegram
+     */
+    public function __construct(
+        Telegram $telegram
+    ) {
+        $this->api = $telegram;
         TelegramLog::initialize(Logger::getLogger());
-        return $this;
     }
 
     /**
