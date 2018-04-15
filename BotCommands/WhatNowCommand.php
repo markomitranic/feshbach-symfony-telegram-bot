@@ -2,16 +2,19 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
-use App\Provider\LectureProvider;
+use App\Bot\Telegram;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
-use Longman\TelegramBot\Entities\Update;
 use Longman\TelegramBot\Request;
-use Longman\TelegramBot\Telegram;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class WhatNowCommand extends UserCommand
 {
+
+    /**
+     * @var Telegram
+     */
+    protected $telegram;
 
     /**
      * @var string
@@ -32,18 +35,6 @@ class WhatNowCommand extends UserCommand
      * @var string
      */
     protected $version = '1.0.0';
-
-    /**
-     * @var LectureProvider
-     */
-    protected $lectureProvider;
-
-    public function __construct(
-        Telegram $telegram,
-        Update $update = null
-    ) {
-        parent::__construct($telegram, $update);
-    }
 
     /**
      * Execute command
@@ -103,7 +94,7 @@ class WhatNowCommand extends UserCommand
      */
     private function getNextEvents()
     {
-        return $this->lectureProvider->findLecturesInInterval(
+        return $this->telegram->getLectureProvider()->findLecturesInInterval(
             new \DateTimeImmutable(),
             new \DateTimeImmutable('+1 minute')
         );

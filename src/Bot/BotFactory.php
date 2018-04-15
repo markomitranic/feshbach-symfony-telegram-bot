@@ -3,7 +3,6 @@
 namespace App\Bot;
 
 use Longman\TelegramBot\Exception\TelegramException;
-use Longman\TelegramBot\Telegram;
 
 abstract class BotFactory implements BotFactoryInterface
 {
@@ -15,10 +14,12 @@ abstract class BotFactory implements BotFactoryInterface
     public static function create(string $key)
     {
         try {
-            return new Telegram($key, 'resonate.io');
+            $telegram = new Telegram($key, 'resonate.io');
         } catch (TelegramException $e) {
             return null;
         }
+
+        return $telegram;
     }
 
 }
