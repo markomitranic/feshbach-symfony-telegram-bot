@@ -91,10 +91,15 @@ class RateLectureOpinionCommand extends UserCommand
     {
         Request::answerCallbackQuery(['callback_query_id' => $this->callbackQuery->getId()]);
 
+        $newRating = $this->telegram->commandArguments[1];
+        if (!isset($newRating) || is_null($newRating)) {
+            return $this->respondWithNoLectureRating($data);
+        }
+
         $this->telegram->getLectureService()->setOpinionForLecture(
             $this->telegram->getUserRepository()->find($this->callbackQuery->getFrom()->getId()),
             $lecture,
-            2
+            $newRating
         );
 
         try {
@@ -106,6 +111,23 @@ class RateLectureOpinionCommand extends UserCommand
 
         $data['text'] = '<strong>Thanks for telling me what you think, im keeping tabs on everything, so the general consesnsus grade fot this lecture is '.$consensus['rating'].', based on '.$consensus['votes'].' votes.</strong>';
 
+        return Request::sendMessage($data);
+    }
+
+    /**
+     * @param array $data
+     * @return \Longman\TelegramBot\Entities\ServerResponse
+     * @throws \Longman\TelegramBot\Exception\TelegramException
+     */
+    private function respondWithNoLectureRating(array $data)
+    {
+        $data['text'] = 'Hmm, i haven\'t received any rating from you. Are you sure you are using this command right? 😐';
+
+        $inline_keyboard = new InlineKeyboard([
+            ['text' => 'See all events today?', 'callback_query' => 'command__whatNow__today']
+        ]);
+        $inline_keyboard = $inline_keyboard->setResizeKeyboard(true);
+        $data['reply_markup'] = $inline_keyboard;
         return Request::sendMessage($data);
     }
 
