@@ -43,6 +43,12 @@ class Lecture
      */
     private $location;
 
+    /**
+     * @var LectureRating[]
+     * @ORM\OneToMany(targetEntity="App\Entity\LectureRating", mappedBy="lecture")
+     */
+    private $ratings;
+
     public function getId()
     {
         return $this->id;
@@ -114,6 +120,22 @@ class Lecture
     public function setLocation(Location $location): void
     {
         $this->location = $location;
+    }
+
+    /**
+     * @return LectureRating[]|null
+     */
+    public function getRatings()
+    {
+        return $this->ratings;
+    }
+
+    /**
+     * @param LectureRating[] $ratings
+     */
+    public function setRatings(array $ratings): void
+    {
+        $this->ratings = $ratings;
     }
 
 }

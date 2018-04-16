@@ -16,7 +16,7 @@ class LocationFixture implements ORMFixtureInterface
 
         $location1 = new Location();
         $location1->setName('Room 1 @ Dom Omladine');
-        $location1->setIcon('⓵');
+        $location1->setIcon('①');
         $location1->setDescription($faker->text(250));
         $location1->setPhoto($faker->imageUrl(300, 300));
         $manager->persist($location1);

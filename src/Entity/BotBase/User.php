@@ -2,6 +2,7 @@
 
 namespace App\Entity\BotBase;
 
+use App\Entity\LectureRating;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -86,11 +87,42 @@ class User
     private $chat;
 
     /**
+     * @var LectureRating[]
+     * @ORM\OneToMany(targetEntity="App\Entity\LectureRating", mappedBy="user")
+     */
+    private $ratings;
+
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->chat = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return LectureRating[]
+     */
+    public function getRatings(): array
+    {
+        return $this->ratings;
+    }
+
+    /**
+     * @param LectureRating[] $ratings
+     */
+    public function setRatings(array $ratings): void
+    {
+        $this->ratings = $ratings;
     }
 
 }

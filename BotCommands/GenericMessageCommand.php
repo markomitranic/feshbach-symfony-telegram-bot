@@ -34,7 +34,9 @@ class GenericMessageCommand extends SystemCommand
         'Tweet about us 🐦' => 'tweetAboutUs',
         'What now? ⏱' => 'WhatNow',
         'Get Directions 🗺' => 'getDirections',
-        'Full Timetable ⛓' => 'fullTimetable'
+        'Full Timetable ⛓' => 'fullTimetable',
+        'Rate a lecture 🏅' => 'rateLectureList',
+        'Rate another ☝🏻' => 'rateLectureList'
     ];
 
     /**

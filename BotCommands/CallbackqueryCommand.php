@@ -44,7 +44,9 @@ class CallbackqueryCommand extends SystemCommand
     private $allowedCallbackCommands = [
         'pugBomb' => 'pugBomb',
         'personalSurvey' => 'personalSurvey',
-        'singleLecture' => 'singleLecture'
+        'singleLecture' => 'singleLecture',
+        'rateLectureSingle' => 'rateLectureSingle',
+        'rateLectureOpinion' => 'rateLectureOpinion'
     ];
 
     /**
