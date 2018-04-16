@@ -27,7 +27,13 @@ class Speaker
     private $company;
 
     /**
-     * @var Lecture[]
+     * @var Link[]
+     * @ORM\OneToMany(targetEntity="App\Entity\Link", mappedBy="speaker")
+     */
+    private $links;
+
+    /**
+     * @var Lecture[]|null
      * @ORM\OneToMany(targetEntity="App\Entity\Lecture", mappedBy="speaker")
      */
     private $lectures;
@@ -75,6 +81,22 @@ class Speaker
     public function setLectures(array $lectures): void
     {
         $this->lectures = $lectures;
+    }
+
+    /**
+     * @return Link[]|null
+     */
+    public function getLinks()
+    {
+        return $this->links;
+    }
+
+    /**
+     * @param Link[] $links
+     */
+    public function setLinks(array $links): void
+    {
+        $this->links = $links;
     }
 
 }

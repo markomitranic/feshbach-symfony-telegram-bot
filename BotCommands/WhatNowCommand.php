@@ -3,8 +3,11 @@
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use App\Bot\Telegram;
+use App\Entity\Lecture;
+use App\Entity\Speaker;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
+use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
@@ -58,16 +61,53 @@ class WhatNowCommand extends UserCommand
         }
 
 
-//
-//        $inline_keyboard = new InlineKeyboard([
-//            ['text' => 'Tweet to @resonate.io', 'url' => 'https://twitter.com/intent/tweet?text=@resonate_io']
-//        ],[
-//            ['text' => 'Tweet to #res18', 'url' => 'https://twitter.com/intent/tweet?hashtags=res18']
-//        ]);
-//        $inline_keyboard = $inline_keyboard->setResizeKeyboard(true);
-//        $data['reply_markup'] = $inline_keyboard;
+        return $this->respondWithLecturesList($data, $events);
+    }
+
+    /**
+     * @param array $data
+     * @param Lecture[] $lectures
+     * @return \Longman\TelegramBot\Entities\ServerResponse
+     * @throws \Longman\TelegramBot\Exception\TelegramException
+     */
+    private function respondWithLecturesList(array $data, $lectures)
+    {
+        $data['text'] = 'Here you go:';
+        $keyboard = new Keyboard([
+            ['text' => 'What now? ⏱'], ['text' => 'Find a Workgroup 🎎'],
+        ], [
+            ['text' => 'Get Directions 🗺'], ['text' => 'Full Timetable ⛓'],
+        ], [
+            ['text' => '🔙']
+        ]);
+        $keyboard = $keyboard
+            ->setResizeKeyboard(true);
+        $data['reply_markup'] = $keyboard;
+
+        Request::sendMessage($data);
+
+        $data['text'] = 'I found all of this, during the next hour.';
+
+        $inline_keyboard = new InlineKeyboard([]);
+        foreach ($lectures as $lecture) {
+            $inline_keyboard->addRow(['text' => $this->getLectureDisplayName($lecture), 'callback_data' => 'command__singleLecture__'. $lecture->getId()]);
+        }
+        $inline_keyboard = $inline_keyboard->setResizeKeyboard(true);
+        $data['reply_markup'] = $inline_keyboard;
 
         return Request::sendMessage($data);
+    }
+
+    private function getLectureDisplayName(Lecture $lecture)
+    {
+
+        $lectureName = $lecture->getLocation()->getIcon() . ' ';
+
+        $lectureName .= $lecture->getSpeaker()->getName() . ' ~ ';
+        if ($lecture->getSpeaker()->getCompany() && !is_null($lecture->getSpeaker()->getCompany())) {
+            $lectureName .= $lecture->getSpeaker()->getCompany();
+        }
+        return $lectureName;
     }
 
     /**
@@ -96,7 +136,7 @@ class WhatNowCommand extends UserCommand
     {
         return $this->telegram->getLectureProvider()->findLecturesInInterval(
             new \DateTimeImmutable(),
-            new \DateTimeImmutable('+1 minute')
+            new \DateTimeImmutable('+1 hour')
         );
     }
 

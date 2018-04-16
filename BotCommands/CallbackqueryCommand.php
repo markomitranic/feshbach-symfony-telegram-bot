@@ -3,6 +3,7 @@
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use App\Bot\Exceptions\UnrecognizedCommandException;
+use App\Bot\Telegram;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\CallbackQuery;
 use Longman\TelegramBot\Request;
@@ -16,6 +17,12 @@ use Longman\TelegramBot\Request;
  */
 class CallbackqueryCommand extends SystemCommand
 {
+
+    /**
+     * @var Telegram
+     */
+    protected $telegram;
+
     /**
      * @var string
      */
@@ -36,7 +43,8 @@ class CallbackqueryCommand extends SystemCommand
      */
     private $allowedCallbackCommands = [
         'pugBomb' => 'pugBomb',
-        'personalSurvey' => 'personalSurvey'
+        'personalSurvey' => 'personalSurvey',
+        'singleLecture' => 'singleLecture'
     ];
 
     /**
@@ -52,12 +60,13 @@ class CallbackqueryCommand extends SystemCommand
         $command = explode('__', $data);
         $callbackType = $command[0];
         $callbackName = $command[1];
+        $callbackArguments =  array_splice($command, 2);
 
         try {
 
             switch ($callbackType) {
                 case 'command':
-                    return $this->executeCommandByName($callbackName);
+                    return $this->executeCommandByName($callbackName, $callbackArguments);
                 default:
                     return $this->generateInvalidCommandReply($callback_query);
             }
@@ -73,13 +82,14 @@ class CallbackqueryCommand extends SystemCommand
      * @throws \Longman\TelegramBot\Exception\TelegramException
      * @throws UnrecognizedCommandException
      */
-    private function executeCommandByName(string $commandName)
+    private function executeCommandByName(string $commandName, array $arguments)
     {
         if (!isset($this->allowedCallbackCommands[$commandName])
             || !$this->getTelegram()->getCommandObject($this->allowedCallbackCommands[$commandName])) {
             throw new UnrecognizedCommandException();
         }
 
+        $this->getTelegram()->commandArguments = $arguments;
         return $this->getTelegram()->executeCommand($this->allowedCallbackCommands[$commandName]);
     }
 

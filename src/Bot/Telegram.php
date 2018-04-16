@@ -19,6 +19,11 @@ class Telegram extends VendorTelegram
     }
 
     /**
+     * @var array
+     */
+    public $commandArguments = [];
+
+    /**
      * @var LectureProvider
      */
     protected $lectureProvider;

@@ -27,6 +27,15 @@ class LectureProvider
     }
 
     /**
+     * @param int $id
+     * @return \App\Entity\Lecture|null
+     */
+    public function find(int $id)
+    {
+        return $this->repository->find($id);
+    }
+
+    /**
      * @param \DateTimeImmutable $from Inclusive
      * @param \DateTimeImmutable $to Exclusive
      * @return \App\Entity\Lecture[]
@@ -44,7 +53,7 @@ class LectureProvider
             ->setParameter('nextHour', $to)
             ->orderBy('Lecture.date')
             ->getQuery()
-            ->getArrayResult();
+            ->getResult();
 
         if (!isset($results) || empty($results)) {
             throw new ResourceNotFoundException('No lectures during the next hour.');

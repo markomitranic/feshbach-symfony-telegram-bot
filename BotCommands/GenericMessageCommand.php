@@ -3,6 +3,7 @@
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use App\Bot\Exceptions\UnrecognizedCommandException;
+use App\Logger;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Request;
 
@@ -31,7 +32,9 @@ class GenericMessageCommand extends SystemCommand
         '🔙' => 'homeScreenKeyboard',
         'Information Desk ℹ️' => 'infoDesk',
         'Tweet about us 🐦' => 'tweetAboutUs',
-        'What now? ⏱' => 'WhatNow'
+        'What now? ⏱' => 'WhatNow',
+        'Get Directions 🗺' => 'getDirections',
+        'Full Timetable ⛓' => 'fullTimetable'
     ];
 
     /**
@@ -47,8 +50,10 @@ class GenericMessageCommand extends SystemCommand
 
         try {
             return $this->executeCommandByName($data);
-        } catch (\Exception $e) {
+        } catch (UnrecognizedCommandException $e) {
             return $this->generateInvalidCommandReply($message->getChat()->getId());
+        } catch (\Exception $e) {
+            return $this->generateServerErrorReply($message->getChat()->getId(), $e);
         }
     }
 
@@ -76,6 +81,21 @@ class GenericMessageCommand extends SystemCommand
     {
         $data['chat_id'] = $chatId;
         $data['text'] = 'Ugh, didn\'t quite understand that, sorry.';
+        return Request::sendMessage($data);
+    }
+
+
+    /**
+     * @param int $chatId
+     * @param \Exception $e
+     * @return \Longman\TelegramBot\Entities\ServerResponse
+     * @throws \Longman\TelegramBot\Exception\TelegramException
+     */
+    private function generateServerErrorReply($chatId, \Exception $e)
+    {
+        Logger::getLogger()->error($e->getMessage());
+        $data['chat_id'] = $chatId;
+        $data['text'] = 'A server error occured. So ashamed. 😰';
         return Request::sendMessage($data);
     }
 

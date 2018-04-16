@@ -3,7 +3,9 @@
 namespace App\DataFixtures;
 
 use App\Entity\Lecture;
+use App\Entity\Location;
 use App\Entity\Speaker;
+use App\Repository\LocationRepository;
 use App\Repository\SpeakerRepository;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\ORMFixtureInterface;
@@ -20,17 +22,24 @@ class LectureFixture implements ORMFixtureInterface, DependentFixtureInterface
 
         for ($i = 0; $i < 22; $i++) {
 
-            /** @var SpeakerRepository $repository */
-            $repository = $manager->getRepository('App:Speaker');
+            /** @var SpeakerRepository $speakerRepository */
+            $speakerRepository = $manager->getRepository('App:Speaker');
 
             /** @var Speaker $speaker */
-            $speaker = $repository->find(rand(1, 18));
+            $speaker = $speakerRepository->find(rand(1, 18));
+
+            /** @var LocationRepository $locationRepository */
+            $locationRepository = $manager->getRepository('App:Location');
+
+            /** @var Location $location */
+            $location = $locationRepository->find(rand(1, 2));
 
             $lecture = new Lecture();
             $lecture->setSpeaker($speaker);
             $lecture->setDate(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-1 days', '+1 days')));
             $lecture->setDescription($faker->text(250));
             $lecture->setPhotoUrl($faker->imageUrl(300, 300));
+            $lecture->setLocation($location);
             $manager->persist($lecture);
 
         }
@@ -47,7 +56,8 @@ class LectureFixture implements ORMFixtureInterface, DependentFixtureInterface
     public function getDependencies()
     {
         return [
-            SpeakerFixture::class
+            SpeakerFixture::class,
+            LocationFixture::class
         ];
     }
 }

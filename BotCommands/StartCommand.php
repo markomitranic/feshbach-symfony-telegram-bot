@@ -3,6 +3,7 @@
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use Longman\TelegramBot\Commands\UserCommand;
+use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Request;
 
@@ -61,20 +62,26 @@ class StartCommand extends UserCommand
         $text = 'Hi there!' . PHP_EOL;
         $text .= 'Welcome to Resonate.io, i will be your host for these couple of days. 🙂'. PHP_EOL;
         $data['text'] = $text;
-        Request::sendMessage($data);
 
-        $text = '';
-        $text .= 'You can ask me stuff via the keyboard keys, or if you are a terminal-lover, there is always the /help command to help you get started.'. PHP_EOL;
-        $text .= PHP_EOL;
-        $text .= 'Also, only if you are willing, i can ask you a couple of questions so I get to know you better and maybe help me draw some statistics. Or not, your choice.'.PHP_EOL;
-        $data['text'] = $text;
-
-        $inline_keyboard = new Keyboard([
+        $keyboard = new Keyboard([
             ['text' => 'What now? ⏱'], ['text' => 'Find a Workgroup 🎎'],
         ], [
             ['text' => 'Tweet about us 🐦'], ['text' => 'Rate a lecture 🏅'],
         ], [
             ['text' => 'Information Desk ℹ️']
+        ]);
+        $data['reply_markup'] = $keyboard;
+
+        Request::sendMessage($data);
+
+        $text = '';
+        $text .= 'You can ask me stuff via the keyboard keys, or if you are a terminal-lover, there is always the /help command to help you get started.'. PHP_EOL;
+        $text .= PHP_EOL;
+        $text .= 'Also, only if you are willing, i can ask you a couple of questions so I get to know you better and maybe help me draw some statistics. .. Or not, your choice.'.PHP_EOL;
+        $data['text'] = $text;
+
+        $inline_keyboard = new InlineKeyboard([
+            ['text' => 'Take the personal survey! 📊', 'callback_data' => 'command__survey'],
         ]);
         $data['reply_markup'] = $inline_keyboard;
 

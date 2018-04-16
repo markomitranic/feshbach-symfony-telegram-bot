@@ -37,33 +37,31 @@ class Lecture
      */
     private $photoUrl;
 
+    /**
+     * @var Location
+     * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="lectures")
+     */
+    private $location;
+
     public function getId()
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    /**
+     * @return Speaker
+     */
+    public function getSpeaker(): Speaker
     {
-        return $this->name;
+        return $this->speaker;
     }
 
-    public function setName(string $name): self
+    /**
+     * @param Speaker $speaker
+     */
+    public function setSpeaker(Speaker $speaker): void
     {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getMetaName(): ?string
-    {
-        return $this->metaName;
-    }
-
-    public function setMetaName(string $metaName): self
-    {
-        $this->metaName = $metaName;
-
-        return $this;
+        $this->speaker = $speaker;
     }
 
     public function getDate(): ?\DateTimeImmutable
@@ -103,18 +101,19 @@ class Lecture
     }
 
     /**
-     * @return Speaker
+     * @return Location
      */
-    public function getSpeaker(): Speaker
+    public function getLocation(): Location
     {
-        return $this->speaker;
+        return $this->location;
     }
 
     /**
-     * @param Speaker $speaker
+     * @param Location $location
      */
-    public function setSpeaker(Speaker $speaker): void
+    public function setLocation(Location $location): void
     {
-        $this->speaker = $speaker;
+        $this->location = $location;
     }
+
 }

@@ -10,7 +10,7 @@ doctrine:
         default_connection:   default
         connections:
             default:
-                dbname:               resonate
+                dbname:               feshbach
                 host:                 localhost
                 port:                 ~
                 user:                 root
