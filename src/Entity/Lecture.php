@@ -20,6 +20,12 @@ class Lecture
     private $id;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $name;
+
+    /**
      * @var Speaker
      * @ORM\ManyToOne(targetEntity="App\Entity\Speaker", inversedBy="lectures")
      */
@@ -31,7 +37,7 @@ class Lecture
     private $date;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     private $description;
 
@@ -72,6 +78,22 @@ class Lecture
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
     }
 
     /**
@@ -203,7 +225,30 @@ class Lecture
      */
     public function __toString()
     {
+        if (!is_null($this->getName())) {
+            return $this->getSpeaker()->getName() . ' ~ ' . $this->getName();
+        }
+
         return $this->getSpeaker()->getName();
+    }
+
+    /**
+     * @return string
+     */
+    public function getDisplayName()
+    {
+        $lectureName = $this->getLocation()->getIcon() . ' ';
+        $lectureName .= $this->getSpeaker()->getName();
+
+        if (!is_null($this->getName())) {
+            $lectureName .= ' ~ ' . $this->getName();
+        } else {
+            if (!is_null($this->getSpeaker()->getCompany())) {
+                $lectureName .= ' ~ ' . $this->getSpeaker()->getCompany();
+            }
+        }
+
+        return $lectureName;
     }
 
 }

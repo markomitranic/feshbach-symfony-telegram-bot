@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -76,9 +77,9 @@ class Speaker
     }
 
     /**
-     * @param Lecture[] $lectures
+     * @param Lecture[]|ArrayCollection $lectures
      */
-    public function setLectures(array $lectures): void
+    public function setLectures(ArrayCollection $lectures): void
     {
         $this->lectures = $lectures;
     }
@@ -92,9 +93,9 @@ class Speaker
     }
 
     /**
-     * @param Link[] $links
+     * @param Link[]|ArrayCollection $links
      */
-    public function setLinks(array $links): void
+    public function setLinks(ArrayCollection $links): void
     {
         $this->links = $links;
     }

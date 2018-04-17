@@ -62,9 +62,9 @@ class Link
     }
 
     /**
-     * @return Speaker
+     * @return Speaker|null
      */
-    public function getSpeaker(): Speaker
+    public function getSpeaker()
     {
         return $this->speaker;
     }

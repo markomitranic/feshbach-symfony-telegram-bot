@@ -90,24 +90,12 @@ class WhatNowCommand extends UserCommand
 
         $inline_keyboard = new InlineKeyboard([]);
         foreach ($lectures as $lecture) {
-            $inline_keyboard->addRow(['text' => $this->getLectureDisplayName($lecture), 'callback_data' => 'command__singleLecture__'. $lecture->getId()]);
+            $inline_keyboard->addRow(['text' => $lecture->getDisplayName(), 'callback_data' => 'command__singleLecture__'. $lecture->getId()]);
         }
         $inline_keyboard = $inline_keyboard->setResizeKeyboard(true);
         $data['reply_markup'] = $inline_keyboard;
 
         return Request::sendMessage($data);
-    }
-
-    private function getLectureDisplayName(Lecture $lecture)
-    {
-
-        $lectureName = $lecture->getLocation()->getIcon() . ' ';
-
-        $lectureName .= $lecture->getSpeaker()->getName() . ' ~ ';
-        if ($lecture->getSpeaker()->getCompany() && !is_null($lecture->getSpeaker()->getCompany())) {
-            $lectureName .= $lecture->getSpeaker()->getCompany();
-        }
-        return $lectureName;
     }
 
     /**

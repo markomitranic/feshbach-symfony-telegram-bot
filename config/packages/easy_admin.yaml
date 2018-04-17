@@ -13,11 +13,13 @@ easy_admin:
           list:
             fields:
                 - { property: 'photoUrl', label: 'Photo', type: 'image',  base_path: '%app.path.lecture_images%' }
+                - 'name'
                 - 'speaker.name'
                 - 'date'
                 - 'description'
           form:
             fields:
+                - 'name'
                 - { property: 'speaker', icon: 'user' }
                 - 'date'
                 - 'description'
@@ -39,3 +41,15 @@ easy_admin:
                 - 'description'
                 - { property: 'photoFile', type: 'vich_image'}
                 - 'lectures'
+        Link:
+          class: App\Entity\Link
+          list:
+            fields:
+                - 'speaker'
+                - 'name'
+                - 'link'
+          form:
+            fields:
+                - 'name'
+                - 'link'
+                - 'speaker'
