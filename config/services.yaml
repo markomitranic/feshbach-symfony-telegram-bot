@@ -3,6 +3,9 @@
 imports:
     - { resource: 'parameters.yml' }
 
+parameters:
+    app.path.lecture_images: /uploads/images/lecture
+
 services:
     # default configuration for services in *this* file
     _defaults:

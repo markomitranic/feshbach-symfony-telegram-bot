@@ -12,9 +12,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class Telegram extends VendorTelegram
 {
 
-    const BOT_API_KEY = '586818585:AAFz5J_rX2zU4fVe8RfyO3xVqwCr9N-FUZA';
-    const BOT_USERNAME = 'resonate.io';
-
     public function __construct(
         ContainerInterface $container,
         LectureProvider $lectureProvider,
@@ -22,9 +19,12 @@ class Telegram extends VendorTelegram
         UserRepository $userRepository,
         SpeakerRepository $speakerRepository
     ) {
-        parent::__construct(self::BOT_API_KEY, self::BOT_USERNAME);
+        parent::__construct(
+            $container->getParameter('bot.apikey'),
+            $container->getParameter('bot.username')
+        );
+        
         $this->uploadsPath = __DIR__.'/../../public/uploads/';
-        $mari = $container->getParameter('database.name');
         $this->lectureProvider = $lectureProvider;
         $this->lectureService = $lectureService;
         $this->userRepository = $userRepository;
