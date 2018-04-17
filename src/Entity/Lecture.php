@@ -3,9 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\LectureRepository")
+ * @Vich\Uploadable
  */
 class Lecture
 {
@@ -23,7 +26,7 @@ class Lecture
     private $speaker;
 
     /**
-     * @ORM\Column(type="datetime_immutable")
+     * @ORM\Column(type="datetime")
      */
     private $date;
 
@@ -38,6 +41,12 @@ class Lecture
     private $photoUrl;
 
     /**
+     * @Vich\UploadableField(mapping="lecture_images", fileNameProperty="photoUrl")
+     * @var File
+     */
+    private $photoFile;
+
+    /**
      * @var Location
      * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="lectures")
      */
@@ -48,6 +57,17 @@ class Lecture
      * @ORM\OneToMany(targetEntity="App\Entity\LectureRating", mappedBy="lecture")
      */
     private $ratings;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @var \DateTime
+     */
+    private $updatedAt;
+
+    public function __construct()
+    {
+        $this->updatedAt = new \DateTime('now');
+    }
 
     public function getId()
     {
@@ -70,12 +90,12 @@ class Lecture
         $this->speaker = $speaker;
     }
 
-    public function getDate(): ?\DateTimeImmutable
+    public function getDate(): ?\DateTime
     {
         return $this->date;
     }
 
-    public function setDate(\DateTimeImmutable $date): self
+    public function setDate(\DateTime $date): self
     {
         $this->date = $date;
 
@@ -94,16 +114,40 @@ class Lecture
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getPhotoUrl(): ?string
     {
         return $this->photoUrl;
     }
 
-    public function setPhotoUrl(?string $photoUrl): self
+    /**
+     * @param null|string $photoUrl
+     */
+    public function setPhotoUrl(?string $photoUrl)
     {
         $this->photoUrl = $photoUrl;
+    }
 
-        return $this;
+    /**
+     * @param File|null $image
+     */
+    public function setPhotoFile(File $image = null)
+    {
+        $this->photoFile = $image;
+
+        if ($image) {
+            $this->updatedAt = new \DateTime('now');
+        }
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getPhotoFile()
+    {
+        return $this->photoFile;
     }
 
     /**
@@ -136,6 +180,30 @@ class Lecture
     public function setRatings(array $ratings): void
     {
         $this->ratings = $ratings;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     */
+    public function setUpdatedAt(\DateTime $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function __toString()
+    {
+        return $this->getSpeaker()->getName();
     }
 
 }

@@ -10,11 +10,11 @@ doctrine:
         default_connection:   default
         connections:
             default:
-                dbname:               feshbach
-                host:                 localhost
+                dbname:               '%database.name%'
+                host:                 '%database.host%'
                 port:                 ~
-                user:                 root
-                password:             ~
+                user:                 '%database.user%'
+                password:             '%database.pass%'
                 charset:              utf8mb4
                 default_table_options:
                     charset:          utf8mb4

@@ -96,9 +96,9 @@ class Location
     }
 
     /**
-     * @return Lecture[]
+     * @return Lecture[]|null
      */
-    public function getLectures(): array
+    public function getLectures()
     {
         return $this->lectures;
     }
@@ -109,5 +109,13 @@ class Location
     public function setLectures(array $lectures): void
     {
         $this->lectures = $lectures;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function __toString()
+    {
+        return $this->getName();
     }
 }

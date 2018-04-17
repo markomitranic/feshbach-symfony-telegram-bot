@@ -5,12 +5,11 @@ namespace App\Bot;
 use App\Logger;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\TelegramLog;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class BotService
 {
 
-    const WEBHOOK_SET_ALLOW_TOKEN = 'ntvhn7-9Ve8RfyO-cz5J_rX2-zU4-t49903487';
-    const HOOK_URL = 'https://837ab79c.ngrok.io/hook';
     const COMMANDS_PATH = __DIR__.'/../../BotCommands';
 
     /**
@@ -19,14 +18,40 @@ class BotService
     private $api;
 
     /**
+     * @var string
+     */
+    private $webhookAllowToken;
+
+    /**
+     * @var string
+     */
+    private $webhookUrl;
+
+    /**
+     * @var array
+     */
+    private $dbConfig;
+
+    /**
      * BotService constructor.
      * @param Telegram $telegram
+     * @param ContainerInterface $container
      */
     public function __construct(
-        Telegram $telegram
+        Telegram $telegram,
+        ContainerInterface $container
     ) {
         $this->api = $telegram;
         TelegramLog::initialize(Logger::getLogger());
+
+        $this->webhookAllowToken = $container->getParameter('webhook.set.allow.token');
+        $this->webhookUrl = $container->getParameter('webhook.url');
+        $this->dbConfig = $this->getMysqlConfig(
+            $container->getParameter('database.host'),
+            $container->getParameter('database.user'),
+            $container->getParameter('database.pass'),
+            $container->getParameter('database.name')
+        );
     }
 
     /**
@@ -38,19 +63,11 @@ class BotService
         $this->api->addCommandsPaths([self::COMMANDS_PATH]);
         $this->api->enableAdmins($this->getAdminUsers());
         $this->api->enableLimiter();
-        $this->api->enableMySql($this->getMysqlConfig());
-
-        // Set custom Upload and Download paths
-        //$telegram->setDownloadPath(__DIR__ . '/Download');
-        //$telegram->setUploadPath(__DIR__ . '/Upload');
+        $this->api->enableMySql($this->dbConfig);
 
         // Here you can set some command specific parameters
         // e.g. Google geocode/timezone api key for /date command
         //$telegram->setCommandConfig('date', ['google_api_key' => 'your_google_api_key_here']);
-
-        // Botan.io integration
-        //$telegram->enableBotan('your_botan_token');
-
 
         $this->api->handle();
 
@@ -64,25 +81,33 @@ class BotService
      */
     public function setWebHook(string $authToken)
     {
-        if (!isset($authToken) || $authToken !== self::WEBHOOK_SET_ALLOW_TOKEN) {
+        if (!isset($authToken) || $authToken !== $this->webhookAllowToken) {
             return false;
         }
 
-        $this->api->setWebhook(self::HOOK_URL);
+        $this->api->setWebhook($this->webhookUrl);
 
         return true;
     }
 
     /**
+     * @param $host
+     * @param $user
+     * @param $pass
+     * @param $db
      * @return array
      */
-    private function getMysqlConfig()
-    {
+    private function getMysqlConfig(
+        $host,
+        $user,
+        $pass,
+        $db
+    ){
         return [
-            'host'     => 'localhost',
-            'user'     => 'root',
-            'password' => '',
-            'database' => 'feshbach',
+            'host'     => $host,
+            'user'     => $user,
+            'password' => $pass,
+            'database' => $db,
         ];
     }
 

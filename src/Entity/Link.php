@@ -76,4 +76,12 @@ class Link
     {
         $this->speaker = $speaker;
     }
+
+    /**
+     * @return null|string
+     */
+    public function __toString()
+    {
+        return $this->getName() . ' ~ ' . $this->getLink();
+    }
 }

@@ -2,3 +2,4 @@
 /var/cache/*
 /var/log/*
 .env
+/config/parameters.yml

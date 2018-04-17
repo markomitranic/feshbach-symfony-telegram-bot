@@ -96,7 +96,8 @@ class SingleLectureCommand extends UserCommand
     {
         Request::answerCallbackQuery(['callback_query_id' => $this->callbackQuery->getId()]);
 
-        $data['photo'] = Request::encodeFile($lecture->getPhotoUrl());
+        $imageUrl = __DIR__.'/../../public/uploads/images/lecture/'.$lecture->getPhotoUrl();
+        $data['photo'] = Request::encodeFile($imageUrl);
         Request::sendPhoto($data);
 
         $data['text'] = '<strong>' . $lecture->getSpeaker()->getName() . '</strong>' . PHP_EOL;

@@ -7,7 +7,6 @@ use App\Entity\Location;
 use App\Entity\Speaker;
 use App\Repository\LocationRepository;
 use App\Repository\SpeakerRepository;
-use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\ORMFixtureInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -36,7 +35,7 @@ class LectureFixture implements ORMFixtureInterface, DependentFixtureInterface
 
             $lecture = new Lecture();
             $lecture->setSpeaker($speaker);
-            $lecture->setDate(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-1 days', '+1 days')));
+            $lecture->setDate($faker->dateTimeBetween('-1 days', '+1 days'));
             $lecture->setDescription($faker->text(250));
             $lecture->setPhotoUrl($faker->imageUrl(300, 300));
             $lecture->setLocation($location);

@@ -99,4 +99,11 @@ class Speaker
         $this->links = $links;
     }
 
+    /**
+     * @return null|string
+     */
+    public function __toString()
+    {
+        return $this->getName();
+    }
 }
