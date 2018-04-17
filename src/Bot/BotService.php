@@ -10,7 +10,7 @@ class BotService
 {
 
     const WEBHOOK_SET_ALLOW_TOKEN = 'ntvhn7-9Ve8RfyO-cz5J_rX2-zU4-t49903487';
-    const HOOK_URL = 'https://fe37ccb1.ngrok.io/hook';
+    const HOOK_URL = 'https://837ab79c.ngrok.io/hook';
     const COMMANDS_PATH = __DIR__.'/../../BotCommands';
 
     /**

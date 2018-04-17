@@ -68,9 +68,9 @@ class Speaker
     }
 
     /**
-     * @return Lecture[]
+     * @return Lecture[]|null
      */
-    public function getLectures(): array
+    public function getLectures()
     {
         return $this->lectures;
     }

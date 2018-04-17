@@ -3,15 +3,13 @@
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use App\Bot\Telegram;
-use App\Entity\Lecture;
 use App\Entity\Speaker;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
-use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
-class WhatNowCommand extends UserCommand
+class SpeakerListCommand extends UserCommand
 {
 
     /**
@@ -22,17 +20,17 @@ class WhatNowCommand extends UserCommand
     /**
      * @var string
      */
-    protected $name = 'what_now';
+    protected $name = 'speaker_list';
 
     /**
      * @var string
      */
-    protected $description = 'Get a short list of events that start during the next hour';
+    protected $description = 'Get a list of all speakers.';
 
     /**
      * @var string
      */
-    protected $usage = '/what_now';
+    protected $usage = '/speaker_list';
 
     /**
      * @var string
@@ -52,45 +50,31 @@ class WhatNowCommand extends UserCommand
         $data['chat_id'] = $chat_id;
 
         try {
-            $events = $this->getNextEvents();
+            $speakers = $this->getAllSpeakers();
         } catch (ResourceNotFoundException $e) {
-            return $this->respondWithNoEvents($data);
+            return $this->respondWithNoSpeakers($data);
         } catch (\Exception $e) {
             $data['text'] = 'Uh oh, something went wrong. 🤡';
             return Request::sendMessage($data);
         }
 
 
-        return $this->respondWithLecturesList($data, $events);
+        return $this->respondWithSpeakersList($data, $speakers);
     }
 
     /**
      * @param array $data
-     * @param Lecture[] $lectures
+     * @param Speaker[] $speakers
      * @return \Longman\TelegramBot\Entities\ServerResponse
      * @throws \Longman\TelegramBot\Exception\TelegramException
      */
-    private function respondWithLecturesList(array $data, $lectures)
+    private function respondWithSpeakersList(array $data, $speakers)
     {
-        $data['text'] = 'Here you go:';
-        $keyboard = new Keyboard([
-            ['text' => 'What now? ⏱'], ['text' => 'Speakers 🔊'],
-        ], [
-            ['text' => 'Get Directions 🗺'], ['text' => 'Full Timetable ⛓'],
-        ], [
-            ['text' => '🔙']
-        ]);
-        $keyboard = $keyboard
-            ->setResizeKeyboard(true);
-        $data['reply_markup'] = $keyboard;
-
-        Request::sendMessage($data);
-
-        $data['text'] = 'I found all of this, during the next hour.';
+        $data['text'] = 'Here comes a really long list:';
 
         $inline_keyboard = new InlineKeyboard([]);
-        foreach ($lectures as $lecture) {
-            $inline_keyboard->addRow(['text' => $this->getLectureDisplayName($lecture), 'callback_data' => 'command__singleLecture__'. $lecture->getId()]);
+        foreach ($speakers as $speaker) {
+            $inline_keyboard->addRow(['text' => $speaker->getName(), 'callback_data' => 'command__speakerSingle__'. $speaker->getId()]);
         }
         $inline_keyboard = $inline_keyboard->setResizeKeyboard(true);
         $data['reply_markup'] = $inline_keyboard;
@@ -98,26 +82,14 @@ class WhatNowCommand extends UserCommand
         return Request::sendMessage($data);
     }
 
-    private function getLectureDisplayName(Lecture $lecture)
-    {
-
-        $lectureName = $lecture->getLocation()->getIcon() . ' ';
-
-        $lectureName .= $lecture->getSpeaker()->getName() . ' ~ ';
-        if ($lecture->getSpeaker()->getCompany() && !is_null($lecture->getSpeaker()->getCompany())) {
-            $lectureName .= $lecture->getSpeaker()->getCompany();
-        }
-        return $lectureName;
-    }
-
     /**
      * @param array $data
      * @return \Longman\TelegramBot\Entities\ServerResponse
      * @throws \Longman\TelegramBot\Exception\TelegramException
      */
-    private function respondWithNoEvents(array $data)
+    private function respondWithNoSpeakers(array $data)
     {
-        $data['text'] = 'Sorry pal, i don\'t see any events starting in the next hour. 😐';
+        $data['text'] = 'Weird thing just happened 😐 i see no speakers in the databse.';
 
         $inline_keyboard = new InlineKeyboard([
             ['text' => 'See all events today?', 'callback_query' => 'command__whatNow__today']
@@ -128,16 +100,13 @@ class WhatNowCommand extends UserCommand
     }
 
     /**
-     * @return \App\Entity\Lecture[]
+     * @return Speaker[]
      * @throws \Exception
      * @throws ResourceNotFoundException
      */
-    private function getNextEvents()
+    private function getAllSpeakers()
     {
-        return $this->telegram->getLectureProvider()->findLecturesInInterval(
-            new \DateTimeImmutable(),
-            new \DateTimeImmutable('+1 hour')
-        );
+        return $this->telegram->getSpeakerRepository()->findAll();
     }
 
 }

@@ -33,10 +33,12 @@ class GenericMessageCommand extends SystemCommand
         'Information Desk ℹ️' => 'infoDesk',
         'Tweet about us 🐦' => 'tweetAboutUs',
         'What now? ⏱' => 'WhatNow',
+        'Upcoming Talks ☝🏻' => 'WhatNow',
         'Get Directions 🗺' => 'getDirections',
         'Full Timetable ⛓' => 'fullTimetable',
         'Rate a lecture 🏅' => 'rateLectureList',
-        'Rate another ☝🏻' => 'rateLectureList'
+        'Rate another ☝🏻' => 'rateLectureList',
+        'Speakers 🔊' => 'speakerList'
     ];
 
     /**
@@ -67,7 +69,7 @@ class GenericMessageCommand extends SystemCommand
      */
     private function executeCommandByName(string $commandName)
     {
-        if (!isset($this->allowedCallbackMessages[$commandName])
+        if (!array_key_exists($commandName, $this->allowedCallbackMessages)
             || !$this->getTelegram()->getCommandObject($this->allowedCallbackMessages[$commandName])) {
             throw new UnrecognizedCommandException();
         }

@@ -46,7 +46,8 @@ class CallbackqueryCommand extends SystemCommand
         'personalSurvey' => 'personalSurvey',
         'singleLecture' => 'singleLecture',
         'rateLectureSingle' => 'rateLectureSingle',
-        'rateLectureOpinion' => 'rateLectureOpinion'
+        'rateLectureOpinion' => 'rateLectureOpinion',
+        'speakerSingle' => 'speakerSingle'
     ];
 
     /**

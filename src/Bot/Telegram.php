@@ -4,6 +4,7 @@ namespace App\Bot;
 
 use App\LectureService;
 use App\Provider\LectureProvider;
+use App\Repository\SpeakerRepository;
 use App\Repository\UserRepository;
 use Longman\TelegramBot\Telegram as VendorTelegram;
 
@@ -16,12 +17,14 @@ class Telegram extends VendorTelegram
     public function __construct(
         LectureProvider $lectureProvider,
         LectureService $lectureService,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        SpeakerRepository $speakerRepository
     ) {
         parent::__construct(self::BOT_API_KEY, self::BOT_USERNAME);
         $this->lectureProvider = $lectureProvider;
         $this->lectureService = $lectureService;
         $this->userRepository = $userRepository;
+        $this->speakerRepository = $speakerRepository;
     }
 
     /**
@@ -45,6 +48,11 @@ class Telegram extends VendorTelegram
     protected $userRepository;
 
     /**
+     * @var SpeakerRepository
+     */
+    protected $speakerRepository;
+
+    /**
      * @return LectureProvider
      */
     public function getLectureProvider(): LectureProvider
@@ -66,6 +74,14 @@ class Telegram extends VendorTelegram
     public function getUserRepository(): UserRepository
     {
         return $this->userRepository;
+    }
+
+    /**
+     * @return SpeakerRepository
+     */
+    public function getSpeakerRepository(): SpeakerRepository
+    {
+        return $this->speakerRepository;
     }
 
 }
