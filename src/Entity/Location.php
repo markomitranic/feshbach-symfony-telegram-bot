@@ -2,10 +2,14 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\LocationRepository")
+ * @Vich\Uploadable
  */
 class Location
 {
@@ -37,10 +41,27 @@ class Location
     private $photo;
 
     /**
+     * @Vich\UploadableField(mapping="location_images", fileNameProperty="photo")
+     * @var File
+     */
+    private $photoFile;
+
+    /**
      * @var Lecture[]
      * @ORM\OneToMany(targetEntity="App\Entity\Lecture", mappedBy="location")
      */
     private $lectures;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @var \DateTime
+     */
+    private $updatedAt;
+
+    public function __construct()
+    {
+        $this->updatedAt = new \DateTime('now');
+    }
 
     public function getId()
     {
@@ -83,17 +104,42 @@ class Location
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getPhoto(): ?string
     {
         return $this->photo;
     }
 
-    public function setPhoto(?string $photo): self
+    /**
+     * @param null|string $photo
+     */
+    public function setPhoto(?string $photo)
     {
         $this->photo = $photo;
-
-        return $this;
     }
+
+    /**
+     * @param File|null $image
+     */
+    public function setPhotoFile(File $image = null)
+    {
+        $this->photoFile = $image;
+
+        if ($image) {
+            $this->updatedAt = new \DateTime('now');
+        }
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getPhotoFile()
+    {
+        return $this->photoFile;
+    }
+
 
     /**
      * @return Lecture[]|null
@@ -104,9 +150,9 @@ class Location
     }
 
     /**
-     * @param Lecture[] $lectures
+     * @param Lecture[]|ArrayCollection $lectures
      */
-    public function setLectures(array $lectures): void
+    public function setLectures(ArrayCollection $lectures): void
     {
         $this->lectures = $lectures;
     }

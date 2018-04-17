@@ -23,7 +23,7 @@ class Telegram extends VendorTelegram
             $container->getParameter('bot.apikey'),
             $container->getParameter('bot.username')
         );
-        
+
         $this->uploadsPath = __DIR__.'/../../public/uploads/';
         $this->lectureProvider = $lectureProvider;
         $this->lectureService = $lectureService;

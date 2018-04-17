@@ -27,19 +27,15 @@ easy_admin:
           class: App\Entity\Location
           list:
             fields:
-                - { property: 'photo', label: 'Photo', type: 'image' }
+                - { property: 'photo', label: 'Photo', type: 'image',  base_path: '%app.path.location_images%' }
                 - 'icon'
                 - 'name'
                 - 'description'
                 - 'lectures'
-
-#
-#->add('categoryDescription', 'collection',
-#        array(
-#            'type'         => new CategoriesDescriptionType(),
-#            'allow_add' => true,
-#            'options'      => array('data_class' => 'Apw\BlackbullBundle\Entity\CategoriesDescription'),
-#            'choice_label' => 'name',
-#            'by_reference' => false,
-#
-#        ))
+          form:
+            fields:
+                - 'name'
+                - 'icon'
+                - 'description'
+                - { property: 'photoFile', type: 'vich_image'}
+                - 'lectures'

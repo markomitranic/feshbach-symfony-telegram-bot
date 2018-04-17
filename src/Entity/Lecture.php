@@ -75,9 +75,9 @@ class Lecture
     }
 
     /**
-     * @return Speaker
+     * @return Speaker|null
      */
-    public function getSpeaker(): Speaker
+    public function getSpeaker()
     {
         return $this->speaker;
     }
@@ -151,9 +151,9 @@ class Lecture
     }
 
     /**
-     * @return Location
+     * @return Location|null
      */
-    public function getLocation(): Location
+    public function getLocation()
     {
         return $this->location;
     }

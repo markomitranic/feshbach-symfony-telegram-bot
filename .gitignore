@@ -3,3 +3,4 @@
 /var/log/*
 .env
 /config/parameters.yml
+/public/uploads/
