@@ -23,6 +23,7 @@ class GenericMessageCommand extends SystemCommand
         'Upcoming Talks ☝🏻' => 'WhatNow',
         'Get Directions 🗺' => 'getDirections',
         'Full Timetable ⛓' => 'fullTimetable',
+        'Lectures Today 🏬' => 'lectureListToday',
         'Rate a lecture 🏅' => 'rateLectureList',
         'Rate another ☝🏻' => 'rateLectureList',
         'Speakers 🔊' => 'speakerList',

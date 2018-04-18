@@ -74,11 +74,11 @@ class InfoDeskCommand extends UserCommand
             ['text' => 'Upcoming Talks ☝🏻'],
             ['text' => 'Speakers 🔊']
         ], [
-            ['text' => 'Full Timetable ⛓'],
-            ['text' => 'Social Media 🎎']
+            ['text' => 'Lectures Today 🏬'],
+            ['text' => 'Full Timetable ⛓']
         ], [
             ['text' => 'Get Directions 🗺'],
-            ['text' => 'Belgrade Map 🏬']
+            ['text' => 'Social Media 🎎']
         ], [
             ['text' => 'Your profile 🤷🏽‍♀️'],
             ['text' => 'About Feshbach 🤖']

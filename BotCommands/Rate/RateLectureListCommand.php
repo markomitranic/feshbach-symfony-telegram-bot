@@ -110,7 +110,7 @@ class RateLectureListCommand extends UserCommand
         $data['text'] = 'Sorry pal, i don\'t see any events starting in the next hour. 😐';
 
         $inline_keyboard = new InlineKeyboard([
-            ['text' => 'See all events today?', 'callback_query' => 'command__whatNow__today']
+            ['text' => 'See all events today?', 'callback_query' => 'command__lectureListToday']
         ]);
         $inline_keyboard = $inline_keyboard->setResizeKeyboard(true);
         $data['reply_markup'] = $inline_keyboard;

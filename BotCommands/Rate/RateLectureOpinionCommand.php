@@ -124,7 +124,7 @@ class RateLectureOpinionCommand extends UserCommand
         $data['text'] = 'Hmm, i haven\'t received any rating from you. Are you sure you are using this command right? 😐';
 
         $inline_keyboard = new InlineKeyboard([
-            ['text' => 'See all events today?', 'callback_query' => 'command__whatNow__today']
+            ['text' => 'See all events today?', 'callback_query' => 'command__lectureListToday']
         ]);
         $inline_keyboard = $inline_keyboard->setResizeKeyboard(true);
         $data['reply_markup'] = $inline_keyboard;
@@ -141,7 +141,7 @@ class RateLectureOpinionCommand extends UserCommand
         $data['text'] = 'Hmm, i haven\'t received any lecture IDs from you. Are you sure you are using this command right? 😐';
 
         $inline_keyboard = new InlineKeyboard([
-            ['text' => 'See all events today?', 'callback_query' => 'command__whatNow__today']
+            ['text' => 'See all events today?', 'callback_query' => 'command__lectureListToday']
         ]);
         $inline_keyboard = $inline_keyboard->setResizeKeyboard(true);
         $data['reply_markup'] = $inline_keyboard;
