@@ -4,6 +4,7 @@ namespace App\Entity\BotBase;
 
 use App\Entity\LectureRating;
 use App\Entity\UserSurvey;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -94,7 +95,7 @@ class User
     private $ratings;
 
     /**
-     * @var UserSurvey
+     * @var UserSurvey[]
      * @ORM\OneToMany(targetEntity="App\Entity\UserSurvey", mappedBy="user")
      */
     private $survey;
@@ -133,15 +134,15 @@ class User
     }
 
     /**
-     * @param UserSurvey $survey
+     * @param UserSurvey[] $survey
      */
-    public function setSurvey(UserSurvey $survey): void
+    public function setSurvey($survey): void
     {
         $this->survey = $survey;
     }
 
     /**
-     * @return UserSurvey|null
+     * @return UserSurvey[]|ArrayCollection
      */
     public function getSurvey()
     {

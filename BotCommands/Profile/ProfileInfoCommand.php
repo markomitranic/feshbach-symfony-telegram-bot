@@ -62,10 +62,10 @@ class ProfileInfoCommand extends UserCommand
         $data['parse_mode'] = 'Markdown';
         $data['disable_web_page_preview'] = false;
 
-        $user = $this->telegram->getUserProvider()->find($user_id);
+        $surveys = $this->telegram->getUserSurveyProvider()->findByUserId($user_id);
 
-        if ($user->getSurvey() && !is_null($user->getSurvey())) {
-            return $this->respondWithSurveyData($user->getSurvey()[0], $data);
+        if (!is_null($surveys) && !empty($surveys)) {
+            return $this->respondWithSurveyData($surveys[0], $data);
         }
 
         $data['text'] = '_At the moment, we do not store any of your data, except the username:_'.PHP_EOL;
@@ -81,9 +81,10 @@ class ProfileInfoCommand extends UserCommand
 
     /**
      * @param UserSurvey $survey
+     * @param array $data
      * @throws \Longman\TelegramBot\Exception\TelegramException
      */
-    private function respondWithSurveyData(UserSurvey $survey, $data)
+    private function respondWithSurveyData(UserSurvey $survey, array $data)
     {
         $data['text'] = 'Here is all the data we have of you. You can always opt to remove it completely, by going into `Your Profile` menu.'.PHP_EOL;
         $data['text'] .= ''.PHP_EOL;

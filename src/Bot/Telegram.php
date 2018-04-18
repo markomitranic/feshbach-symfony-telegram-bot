@@ -5,7 +5,9 @@ namespace App\Bot;
 use App\LectureService;
 use App\Provider\LectureProvider;
 use App\Provider\UserProvider;
+use App\Provider\UserSurveyProvider;
 use App\Repository\SpeakerRepository;
+use App\Repository\UserSurveyRepository;
 use App\UserService;
 use Longman\TelegramBot\Telegram as VendorTelegram;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -19,7 +21,8 @@ class Telegram extends VendorTelegram
         LectureService $lectureService,
         UserProvider $userProvider,
         UserService $userService,
-        SpeakerRepository $speakerRepository
+        SpeakerRepository $speakerRepository,
+        UserSurveyProvider $userSurveyProvider
     ) {
         parent::__construct(
             $container->getParameter('bot.apikey'),
@@ -32,6 +35,7 @@ class Telegram extends VendorTelegram
         $this->userProvider = $userProvider;
         $this->userService = $userService;
         $this->speakerRepository = $speakerRepository;
+        $this->userSurveyProvider = $userSurveyProvider;
     }
 
     /**
@@ -68,6 +72,11 @@ class Telegram extends VendorTelegram
      * @var SpeakerRepository
      */
     protected $speakerRepository;
+
+    /**
+     * @var UserSurveyProvider
+     */
+    protected $userSurveyProvider;
 
     /**
      * @return LectureProvider
@@ -107,6 +116,14 @@ class Telegram extends VendorTelegram
     public function getSpeakerRepository(): SpeakerRepository
     {
         return $this->speakerRepository;
+    }
+
+    /**
+     * @return UserSurveyProvider
+     */
+    public function getUserSurveyProvider(): UserSurveyProvider
+    {
+        return $this->userSurveyProvider;
     }
 
 }
