@@ -97,7 +97,8 @@ class RateLectureSingleCommand extends UserCommand
     {
         Request::answerCallbackQuery(['callback_query_id' => $this->callbackQuery->getId()]);
 
-        $data['photo'] = Request::encodeFile($lecture->getPhotoUrl());
+        $imageUrl = __DIR__.'/../../public/uploads/images/lecture/'.$lecture->getPhotoUrl();
+        $data['photo'] = Request::encodeFile($imageUrl);
         $keyboard = new Keyboard([
             ['text' => 'Rate another ☝🏻'], ['text' => 'Find a Workgroup 🎎']
         ], [
