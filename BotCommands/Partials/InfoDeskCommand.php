@@ -49,7 +49,7 @@ class InfoDeskCommand extends UserCommand
         $data['text'] = $text;
 
         $data['reply_markup'] = new InlineKeyboard([
-            ['text' => 'Take the personal survey! 📊', 'callback_data' => 'command__personalSurvey']
+            ['text' => 'Take the personal survey! 📊', 'callback_data' => 'command__profileSurvey']
         ]);
 
         Request::sendMessage($data);

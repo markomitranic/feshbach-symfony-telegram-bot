@@ -20,6 +20,19 @@ class CallbackqueryCommand extends SystemCommand
 {
 
     /**
+     * @var array
+     */
+    private $allowedCallbackCommands = [
+        'pugBomb' => 'pugBomb',
+        'profileSurvey' => 'profileSurvey',
+        'singleLecture' => 'singleLecture',
+        'rateLectureSingle' => 'rateLectureSingle',
+        'rateLectureOpinion' => 'rateLectureOpinion',
+        'speakerSingle' => 'speakerSingle',
+        'profileSurveyDelete' => 'profileSurveyDelete'
+    ];
+
+    /**
      * @var Telegram
      */
     protected $telegram;
@@ -38,18 +51,6 @@ class CallbackqueryCommand extends SystemCommand
      * @var string
      */
     protected $version = '1.1.1';
-
-    /**
-     * @var array
-     */
-    private $allowedCallbackCommands = [
-        'pugBomb' => 'pugBomb',
-        'personalSurvey' => 'personalSurvey',
-        'singleLecture' => 'singleLecture',
-        'rateLectureSingle' => 'rateLectureSingle',
-        'rateLectureOpinion' => 'rateLectureOpinion',
-        'speakerSingle' => 'speakerSingle'
-    ];
 
     /**
      * Command execute method

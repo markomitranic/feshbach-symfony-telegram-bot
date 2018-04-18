@@ -3,6 +3,7 @@
 namespace App\Entity\BotBase;
 
 use App\Entity\LectureRating;
+use App\Entity\UserSurvey;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -92,6 +93,12 @@ class User
      */
     private $ratings;
 
+    /**
+     * @var UserSurvey
+     * @ORM\OneToMany(targetEntity="App\Entity\UserSurvey", mappedBy="user")
+     */
+    private $survey;
+
 
     /**
      * Constructor
@@ -123,6 +130,46 @@ class User
     public function setRatings(array $ratings): void
     {
         $this->ratings = $ratings;
+    }
+
+    /**
+     * @param UserSurvey $survey
+     */
+    public function setSurvey(UserSurvey $survey): void
+    {
+        $this->survey = $survey;
+    }
+
+    /**
+     * @return UserSurvey|null
+     */
+    public function getSurvey()
+    {
+        return $this->survey;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * @param null|string $username
+     */
+    public function setUsername(?string $username): void
+    {
+        $this->username = $username;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->firstName . ' ' . $this->lastName;
     }
 
 }

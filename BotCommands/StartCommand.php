@@ -81,7 +81,7 @@ class StartCommand extends UserCommand
         $data['text'] = $text;
 
         $inline_keyboard = new InlineKeyboard([
-            ['text' => 'Take the personal survey! 📊', 'callback_data' => 'command__survey'],
+            ['text' => 'Take the personal survey! 📊', 'callback_data' => 'command__profileSurvey'],
         ]);
         $data['reply_markup'] = $inline_keyboard;
 

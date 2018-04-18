@@ -5,10 +5,31 @@ namespace Longman\TelegramBot\Commands\SystemCommands;
 use App\Bot\Exceptions\UnrecognizedCommandException;
 use App\Logger;
 use Longman\TelegramBot\Commands\SystemCommand;
+use Longman\TelegramBot\Conversation;
+use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
 
 class GenericMessageCommand extends SystemCommand
 {
+
+    /**
+     * @var array
+     */
+    private $allowedCallbackMessages = [
+        '🔙' => 'homeScreenKeyboard',
+        'Information Desk ℹ️' => 'infoDesk',
+        'Tweet about us 🐦' => 'tweetAboutUs',
+        'What now? ⏱' => 'WhatNow',
+        'Upcoming Talks ☝🏻' => 'WhatNow',
+        'Get Directions 🗺' => 'getDirections',
+        'Full Timetable ⛓' => 'fullTimetable',
+        'Rate a lecture 🏅' => 'rateLectureList',
+        'Rate another ☝🏻' => 'rateLectureList',
+        'Speakers 🔊' => 'speakerList',
+        'Social Media 🎎' => 'socialMedia',
+        'About Feshbach 🤖' => 'aboutBot',
+        'Your profile 🤷🏽‍♀️' => 'profileInfo'
+    ];
 
     /**
      * @var string
@@ -26,22 +47,9 @@ class GenericMessageCommand extends SystemCommand
     protected $version = '1.1.2';
 
     /**
-     * @var array
+     * @var bool
      */
-    private $allowedCallbackMessages = [
-        '🔙' => 'homeScreenKeyboard',
-        'Information Desk ℹ️' => 'infoDesk',
-        'Tweet about us 🐦' => 'tweetAboutUs',
-        'What now? ⏱' => 'WhatNow',
-        'Upcoming Talks ☝🏻' => 'WhatNow',
-        'Get Directions 🗺' => 'getDirections',
-        'Full Timetable ⛓' => 'fullTimetable',
-        'Rate a lecture 🏅' => 'rateLectureList',
-        'Rate another ☝🏻' => 'rateLectureList',
-        'Speakers 🔊' => 'speakerList',
-        'Social Media 🎎' => 'socialMedia',
-        'About Feshbach 🤖' => 'aboutBot'
-    ];
+    protected $need_mysql = true;
 
     /**
      * Command execute method
@@ -57,10 +65,33 @@ class GenericMessageCommand extends SystemCommand
         try {
             return $this->executeCommandByName($data);
         } catch (UnrecognizedCommandException $e) {
-            return $this->generateInvalidCommandReply($message->getChat()->getId());
+            try {
+                return $this->handleConversation();
+            } catch(\Exception $e) {
+                return $this->generateInvalidCommandReply($message->getChat()->getId());
+            }
         } catch (\Exception $e) {
             return $this->generateServerErrorReply($message->getChat()->getId(), $e);
         }
+    }
+
+    /**
+     * @return mixed
+     * @throws \Longman\TelegramBot\Exception\TelegramException
+     */
+    private function handleConversation()
+    {
+        $conversation = new Conversation(
+            $this->getMessage()->getFrom()->getId(),
+            $this->getMessage()->getChat()->getId()
+        );
+
+        if ($conversation->exists() && ($command = $conversation->getCommand())) {
+            return $this->telegram->executeCommand($command);
+        }
+
+        $conversation->stop();
+        throw new TelegramException('The message is not a conversation');
     }
 
     /**

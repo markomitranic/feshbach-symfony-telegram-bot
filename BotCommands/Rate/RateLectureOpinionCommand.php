@@ -97,7 +97,7 @@ class RateLectureOpinionCommand extends UserCommand
         }
 
         $this->telegram->getLectureService()->setOpinionForLecture(
-            $this->telegram->getUserRepository()->find($this->callbackQuery->getFrom()->getId()),
+            $this->telegram->getUserProvider()->find($this->callbackQuery->getFrom()->getId()),
             $lecture,
             $newRating
         );

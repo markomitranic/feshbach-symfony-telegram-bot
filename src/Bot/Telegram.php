@@ -4,8 +4,9 @@ namespace App\Bot;
 
 use App\LectureService;
 use App\Provider\LectureProvider;
+use App\Provider\UserProvider;
 use App\Repository\SpeakerRepository;
-use App\Repository\UserRepository;
+use App\UserService;
 use Longman\TelegramBot\Telegram as VendorTelegram;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -16,7 +17,8 @@ class Telegram extends VendorTelegram
         ContainerInterface $container,
         LectureProvider $lectureProvider,
         LectureService $lectureService,
-        UserRepository $userRepository,
+        UserProvider $userProvider,
+        UserService $userService,
         SpeakerRepository $speakerRepository
     ) {
         parent::__construct(
@@ -27,7 +29,8 @@ class Telegram extends VendorTelegram
         $this->uploadsPath = __DIR__.'/../../public/uploads/';
         $this->lectureProvider = $lectureProvider;
         $this->lectureService = $lectureService;
-        $this->userRepository = $userRepository;
+        $this->userProvider = $userProvider;
+        $this->userService = $userService;
         $this->speakerRepository = $speakerRepository;
     }
 
@@ -52,9 +55,14 @@ class Telegram extends VendorTelegram
     protected $lectureService;
 
     /**
-     * @var UserRepository
+     * @var UserProvider
      */
-    protected $userRepository;
+    protected $userProvider;
+
+    /**
+     * @var UserService
+     */
+    protected $userService;
 
     /**
      * @var SpeakerRepository
@@ -78,11 +86,19 @@ class Telegram extends VendorTelegram
     }
 
     /**
-     * @return UserRepository
+     * @return UserProvider
      */
-    public function getUserRepository(): UserRepository
+    public function getUserProvider(): UserProvider
     {
-        return $this->userRepository;
+        return $this->userProvider;
+    }
+
+    /**
+     * @return UserService
+     */
+    public function getUserService(): UserService
+    {
+        return $this->userService;
     }
 
     /**
