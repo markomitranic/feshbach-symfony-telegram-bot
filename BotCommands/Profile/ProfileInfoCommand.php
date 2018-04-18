@@ -63,8 +63,7 @@ class ProfileInfoCommand extends UserCommand
         $data['disable_web_page_preview'] = false;
 
         $surveys = $this->telegram->getUserSurveyProvider()->findByUserId($user_id);
-
-        if (!is_null($surveys) && !empty($surveys)) {
+        if (is_null($surveys) || empty($surveys)) {
             return $this->respondWithSurveyData($surveys[0], $data);
         }
 

@@ -2,6 +2,7 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
+use App\Bot\Telegram;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Entities\Keyboard;
@@ -31,6 +32,11 @@ class InfoDeskCommand extends UserCommand
     protected $version = '1.0.0';
 
     /**
+     * @var Telegram
+     */
+    protected $telegram;
+
+    /**
      * Command execute method
      *
      * @return \Longman\TelegramBot\Entities\ServerResponse
@@ -48,9 +54,15 @@ class InfoDeskCommand extends UserCommand
         $text .= 'That always solves the problem, right? 🤔'. PHP_EOL;
         $data['text'] = $text;
 
-        $data['reply_markup'] = new InlineKeyboard([
-            ['text' => 'Take the personal survey! 📊', 'callback_data' => 'command__profileSurvey']
-        ]);
+        $surveys = $this->telegram->getUserSurveyProvider()->findByUserId(
+            $this->getMessage()->getFrom()->getId()
+        );
+        if (is_null($surveys) || empty($surveys)) {
+            $inline_keyboard = new InlineKeyboard([
+                ['text' => 'Take the personal survey! 📊', 'callback_data' => 'command__profileSurvey'],
+            ]);
+            $data['reply_markup'] = $inline_keyboard;
+        }
 
         Request::sendMessage($data);
 

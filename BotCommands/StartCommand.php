@@ -2,6 +2,7 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
+use App\Bot\Telegram;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Entities\Keyboard;
@@ -48,6 +49,11 @@ class StartCommand extends UserCommand
     protected $conversation;
 
     /**
+     * @var Telegram
+     */
+    protected $telegram;
+
+    /**
      * Command execute method
      *
      * @return \Longman\TelegramBot\Entities\ServerResponse
@@ -80,10 +86,15 @@ class StartCommand extends UserCommand
         $text .= 'Also, only if you are willing, i can ask you a couple of questions so I get to know you better and maybe help me draw some statistics. .. Or not, your choice.'.PHP_EOL;
         $data['text'] = $text;
 
-        $inline_keyboard = new InlineKeyboard([
-            ['text' => 'Take the personal survey! 📊', 'callback_data' => 'command__profileSurvey'],
-        ]);
-        $data['reply_markup'] = $inline_keyboard;
+        $surveys = $this->telegram->getUserSurveyProvider()->findByUserId(
+            $this->getMessage()->getFrom()->getId()
+        );
+        if (is_null($surveys) || empty($surveys)) {
+            $inline_keyboard = new InlineKeyboard([
+                ['text' => 'Take the personal survey! 📊', 'callback_data' => 'command__profileSurvey'],
+            ]);
+            $data['reply_markup'] = $inline_keyboard;
+        }
 
         return Request::sendMessage($data);
     }
