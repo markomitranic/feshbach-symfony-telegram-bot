@@ -22,7 +22,7 @@ class Link
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=1200)
+     * @ORM\Column(type="string", length=1300, options={ "collation": "utf8mb4_unicode_ci" })
      */
     private $link;
 
