@@ -123,7 +123,7 @@ class WhatNowCommand extends UserCommand
     private function getNextEvents()
     {
         return $this->telegram->getLectureProvider()->findLecturesInInterval(
-            new \DateTimeImmutable(),
+            new \DateTimeImmutable('-7 minutes'),
             new \DateTimeImmutable('+1 hour')
         );
     }
