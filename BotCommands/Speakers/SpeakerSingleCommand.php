@@ -107,7 +107,7 @@ class SpeakerSingleCommand extends UserCommand
             foreach ($lectures as $lecture) {
                 $inline_keyboard->addRow(
                     [
-                        'text' => $this->getLectureDisplayName($lecture),
+                        'text' => $lecture->getDisplayName(),
                         'callback_data' => 'command__singleLecture__'.$lecture->getId()
                     ]
                 );
@@ -119,17 +119,6 @@ class SpeakerSingleCommand extends UserCommand
         }
 
         return Request::sendMessage($data);
-    }
-
-    private function getLectureDisplayName(Lecture $lecture)
-    {
-        $lectureName = $lecture->getLocation()->getIcon() . ' ';
-
-        $lectureName .= $lecture->getSpeaker()->getName() . ' ~ ';
-        if ($lecture->getSpeaker()->getCompany() && !is_null($lecture->getSpeaker()->getCompany())) {
-            $lectureName .= $lecture->getSpeaker()->getCompany();
-        }
-        return $lectureName;
     }
 
     /**
