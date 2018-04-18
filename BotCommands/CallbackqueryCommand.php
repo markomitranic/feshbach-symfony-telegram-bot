@@ -4,6 +4,7 @@ namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use App\Bot\Exceptions\UnrecognizedCommandException;
 use App\Bot\Telegram;
+use App\Logger;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\CallbackQuery;
 use Longman\TelegramBot\Request;
@@ -75,6 +76,7 @@ class CallbackqueryCommand extends SystemCommand
             }
 
         } catch (\Exception $e) {
+            Logger::getLogger()->error($e->getMessage());
             return $this->generateInvalidCommandReply($callback_query);
         }
     }
