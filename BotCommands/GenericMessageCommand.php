@@ -38,7 +38,9 @@ class GenericMessageCommand extends SystemCommand
         'Full Timetable ⛓' => 'fullTimetable',
         'Rate a lecture 🏅' => 'rateLectureList',
         'Rate another ☝🏻' => 'rateLectureList',
-        'Speakers 🔊' => 'speakerList'
+        'Speakers 🔊' => 'speakerList',
+        'Social Media 🎎' => 'socialMedia',
+        'About Feshbach 🤖' => 'aboutBot'
     ];
 
     /**
