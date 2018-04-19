@@ -2,6 +2,8 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
+use App\Logger;
+
 use App\Bot\Telegram;
 use App\Entity\Lecture;
 use App\Entity\Speaker;
@@ -54,6 +56,7 @@ class WhatNowCommand extends UserCommand
         try {
             $events = $this->getNextEvents();
         } catch (ResourceNotFoundException $e) {
+		Logger::getLogger()->error($e->getMessage());
             return $this->respondWithNoEvents($data);
         } catch (\Exception $e) {
             $data['text'] = 'Uh oh, something went wrong. 🤡';
@@ -123,8 +126,8 @@ class WhatNowCommand extends UserCommand
     private function getNextEvents()
     {
         return $this->telegram->getLectureProvider()->findLecturesInInterval(
-            new \DateTimeImmutable('-7 minutes'),
-            new \DateTimeImmutable('+1 hour')
+            (new \DateTimeImmutable('-7 minutes'))->setTimezone(new \DateTimeZone('Europe/Belgrade')),
+            (new \DateTimeImmutable('+1 hour'))->setTimezone(new \DateTimeZone('Europe/Belgrade'))
         );
     }
 
