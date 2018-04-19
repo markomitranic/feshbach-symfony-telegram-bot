@@ -125,8 +125,8 @@ class RateLectureListCommand extends UserCommand
     private function getNextEvents()
     {
         return $this->telegram->getLectureProvider()->findLecturesInInterval(
-            new \DateTimeImmutable('-7 minutes'),
-            new \DateTimeImmutable('+1 hour')
+            (new \DateTimeImmutable('-7 minutes'))->setTimezone(new \DateTimeZone('Europe/Belgrade')),
+            (new \DateTimeImmutable('+1 hour'))->setTimezone(new \DateTimeZone('Europe/Belgrade'))
         );
     }
 
