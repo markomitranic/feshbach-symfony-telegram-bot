@@ -29,7 +29,9 @@ class GenericMessageCommand extends SystemCommand
         'Speakers 🔊' => 'speakerList',
         'Social Media 🎎' => 'socialMedia',
         'About Feshbach 🤖' => 'aboutBot',
-        'Your profile 🤷🏽‍♀️' => 'profileInfo'
+        'Your profile 🤷🏽‍♀️' => 'profileInfo',
+        'Night Timetable 🌚' => 'fullTimetableNight',
+        'Day Timetable 🌝' => 'fullTimetable'
     ];
 
     /**

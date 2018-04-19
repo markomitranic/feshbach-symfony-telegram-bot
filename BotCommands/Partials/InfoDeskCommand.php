@@ -75,7 +75,7 @@ class InfoDeskCommand extends UserCommand
             ['text' => 'Speakers 🔊']
         ], [
             ['text' => 'Lectures Today 🏬'],
-            ['text' => 'Full Timetable ⛓']
+            ['text' => 'Day Timetable 🌝']
         ], [
             ['text' => 'Get Directions 🗺'],
             ['text' => 'Social Media 🎎']

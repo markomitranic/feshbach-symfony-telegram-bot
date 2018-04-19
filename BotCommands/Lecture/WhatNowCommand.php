@@ -76,7 +76,7 @@ class WhatNowCommand extends UserCommand
         $keyboard = new Keyboard([
             ['text' => 'What now? ⏱'], ['text' => 'Speakers 🔊'],
         ], [
-            ['text' => 'Get Directions 🗺'], ['text' => 'Full Timetable ⛓'],
+            ['text' => 'Night Timetable 🌚'], ['text' => 'Day Timetable 🌝'],
         ], [
             ['text' => '🔙']
         ]);

@@ -70,7 +70,7 @@ class StartCommand extends UserCommand
         $data['text'] = $text;
 
         $keyboard = new Keyboard([
-            ['text' => 'What now? ⏱'], ['text' => 'Find a Workgroup 🎎'],
+            ['text' => 'What now? ⏱'], ['text' => 'Night Timetable 🌚'],
         ], [
             ['text' => 'Tweet about us 🐦'], ['text' => 'Rate a lecture 🏅'],
         ], [
