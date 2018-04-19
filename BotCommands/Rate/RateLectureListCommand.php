@@ -76,7 +76,7 @@ class RateLectureListCommand extends UserCommand
         $data['text'] .= 'Maybe i’ll make an emanel broch for the awardee, so they can carry it the next year.';
 
         $keyboard = new Keyboard([
-            ['text' => 'What now? ⏱'], ['text' => 'Find a Workgroup 🎎'],
+            ['text' => 'What now? ⏱'], ['text' => 'Day Timetable 🌝'],
         ], [
             ['text' => 'Get Directions 🗺'], ['text' => 'Full Timetable ⛓'],
         ], [

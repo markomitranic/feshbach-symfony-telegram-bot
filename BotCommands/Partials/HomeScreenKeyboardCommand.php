@@ -58,7 +58,7 @@ class HomeScreenKeyboardCommand extends UserCommand
         $data['text'] = $this->cannedResponses[rand(0, count($this->cannedResponses) - 1)];
 
         $keyboard = new Keyboard([
-            ['text' => 'What now? ⏱'],['text' => 'Find a Workgroup 🎎'],
+            ['text' => 'What now? ⏱'],['text' => 'Night Timetable 🌚'],
         ],[
             ['text' => 'Tweet about us 🐦'],['text' => 'Rate a lecture 🏅'],
         ],[

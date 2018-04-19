@@ -100,7 +100,7 @@ class RateLectureSingleCommand extends UserCommand
         $imageUrl = __DIR__.'/../../public/uploads/images/lecture/'.$lecture->getPhotoUrl();
         $data['photo'] = Request::encodeFile($imageUrl);
         $keyboard = new Keyboard([
-            ['text' => 'Rate another ☝🏻'], ['text' => 'Find a Workgroup 🎎']
+            ['text' => 'Rate another ☝🏻'], ['text' => 'Day Timetable 🌝']
         ], [
             ['text' => '🔙']
         ]);
