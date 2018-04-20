@@ -48,10 +48,10 @@ class FullTimeTableCommand extends UserCommand
         $data['parse_mode'] = 'HTML';
         $data['disable_web_page_preview'] = false;
 
-        $data['text'] = 'http://resonate.io/2018/wp-content/uploads/2018/04/resonate-by-day.pdf';
+        $imageUrl = __DIR__.'/../../public/assets/resonate-day.png';
+        $data['photo'] = Request::encodeFile($imageUrl);
 
-        return Request::sendMessage($data);
-
+        return Request::sendPhoto($data);
     }
 
 }

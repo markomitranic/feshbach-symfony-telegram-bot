@@ -52,8 +52,6 @@ class FullTimeTableNightCommand extends UserCommand
         $data['photo'] = Request::encodeFile($imageUrl);
 
         return Request::sendPhoto($data);
-
-
     }
 
 }
